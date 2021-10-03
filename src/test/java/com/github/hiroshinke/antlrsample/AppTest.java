@@ -109,6 +109,99 @@ public class AppTest
 			 "<EOF>").toString() ));
     }
 
+    @Test public void test6() throws Exception
+    {
+
+	Parser p = createTestParserGrammarString
+	    (tempFolder.getRoot().getPath(),
+	     "X",
+	     "grammar X;\n" +
+	     "startRule : sync ( stuff sync )* EOF;\n" +
+	     "sync : { int type = getInputStream().LA(1);" +
+	     "         while( type == ALPH ) " +
+	     "         { consume(); type = getInputStream().LA(1); }}\n" +
+	     ";\n" +
+	     "stuff : DIGIT;\n" +
+	     "DIGIT : ('0' .. '9');\n"+
+	     "ALPH  : ('a' .. 'z' ) | ('A' .. 'Z' );",
+	     "123a45bb56");
+	ParseTree tree = execStartRule(p,"startRule");
+	assertThat(tree.toStringTree(p),
+		   is( l("startRule",
+			 "sync",
+			 l("stuff", "1"),
+			 "sync",
+			 l("stuff", "2"),
+			 "sync",
+			 l("stuff", "3"),
+			 l("sync","a"),
+			 l("stuff", "4"),
+			 "sync",
+			 l("stuff", "5"),
+			 l("sync","b","b"),
+			 l("stuff", "5"),
+			 "sync",
+			 l("stuff", "6"),
+			 "sync",
+			 "<EOF>").toString() ));
+    }
+
+    @Test public void test7() throws Exception
+    {
+
+	Parser p = createTestParserGrammarString
+	    (tempFolder.getRoot().getPath(),
+	     "X",
+	     "grammar X;\n" +
+	     "startRule : stuff* EOF;\n" +
+	     "stuff : DIGIT;\n" +
+	     "DIGIT : ('0' .. '9');\n"+
+	     "ALPH  : ('a' .. 'z' ) | ('A' .. 'Z' );",
+	     "123a45bb56");
+	ParseTree tree = execStartRule(p,"startRule");
+	assertThat(tree.toStringTree(p),
+		   is( l("startRule",
+			 l("stuff", "1"),
+			 l("stuff", "2"),
+			 l("stuff", "3"),
+			 "a",
+			 l("stuff", "4"),
+			 l("stuff", "5"),
+			 "b",
+			 "b",
+			 l("stuff", "5"),
+			 l("stuff", "6"),
+			 "<EOF>").toString() ));
+    }
+
+
+    @Test public void test8() throws Exception
+    {
+
+	Parser p = createTestParserGrammarString
+	    (tempFolder.getRoot().getPath(),
+	     "X",
+	     "grammar X;\n" +
+	     "startRule : stuff* EOF;\n" +
+	     "stuff : DIGIT;\n" +
+	     "DIGIT : ('0' .. '9');\n"+
+	     "ALPH  : ('a' .. 'z' ) | ('A' .. 'Z' );",
+	     "12 3a 45 b b5 6");
+	ParseTree tree = execStartRule(p,"startRule");
+	assertThat(tree.toStringTree(p),
+		   is( l("startRule",
+			 l("stuff", "1"),
+			 l("stuff", "2"),
+			 l("stuff", "3"),
+			 "a",
+			 l("stuff", "4"),
+			 l("stuff", "5"),
+			 "b",
+			 "b",
+			 l("stuff", "5"),
+			 l("stuff", "6"),
+			 "<EOF>").toString() ));
+    }
     
     ArithmeticParser createArithmeticParser(String src){
     
