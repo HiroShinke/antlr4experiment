@@ -43,7 +43,28 @@ public class TestUtil
 {
 
     public static final String CLASSPATH = System.getProperty("java.class.path");
-    public static final String PATH_SEP = System.getProperty("path.separator");    
+    public static final String PATH_SEP = System.getProperty("path.separator");
+
+    
+    public static ListExpr l(Object ... objs){
+	ListExpr l = new ListExpr();
+	for (Object o: objs){
+	    if( o instanceof Expr ){
+		l.addElement((Expr)o);
+	    }
+	    else if( o instanceof String ){
+		l.addElement(new AtomExpr((String)o));
+	    }
+	    else {
+		throw new RuntimeException("bad element");
+	    }
+	}
+	return l;
+    }
+
+    public static AtomExpr a(String name){
+	return new AtomExpr(name);
+    }
 
     
     public static boolean compile(String root,

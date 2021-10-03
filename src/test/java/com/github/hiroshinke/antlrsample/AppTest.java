@@ -29,7 +29,8 @@ import org.apache.commons.io.FileUtils;
 import static com.github.hiroshinke.antlrsample.TestUtil.createTestParserGrammarString;
 import static com.github.hiroshinke.antlrsample.TestUtil.createParser;
 import static com.github.hiroshinke.antlrsample.TestUtil.execStartRule;
-
+import static com.github.hiroshinke.antlrsample.TestUtil.l;
+import static com.github.hiroshinke.antlrsample.TestUtil.a;
 
 /**
  * Unit test for simple App.
@@ -90,7 +91,25 @@ public class AppTest
 	assertThat(tree.toStringTree(p),is("(startRule 1 0 <EOF>)"));
     }
 
+    @Test public void test5() throws Exception
+    {
 
+	Parser p = createTestParserGrammarString(tempFolder.getRoot().getPath(),
+						 "X",
+						 "grammar X;\n" +
+						 "startRule: number* EOF;\n" +
+						 "number : DIGIT ;\n" +
+						 "DIGIT: ('0' .. '9')+ ;\n",
+						 "125 300");
+	ParseTree tree = execStartRule(p,"startRule");
+	assertThat(tree.toStringTree(p),
+		   is( l("startRule",
+			 l("number", "125"),
+			 l("number", "300"),
+			 "<EOF>").toString() ));
+    }
+
+    
     ArithmeticParser createArithmeticParser(String src){
     
         ANTLRInputStream input = new ANTLRInputStream(src); 
