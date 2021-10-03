@@ -50,8 +50,11 @@ public class AppTest
     {
 	ArithmeticParser p = createArithmeticParser("x=1+2\n");
 	ParseTree tree = p.file_();
-	System.out.println(tree.toStringTree(p));
-	assertTrue( true );
+	assertThat(tree.toStringTree(p),
+		   is("(file_ (stat (expression (atom (variable x))) " +
+		      "(relop =) (expression (expression " +
+		      "(atom (scientific 1))) + (expression (atom (scientific 2))))" +
+		      " \\n) <EOF>)"));
     }
 
     @Test public void test2()
