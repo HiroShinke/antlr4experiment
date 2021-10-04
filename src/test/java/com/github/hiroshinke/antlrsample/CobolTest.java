@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 import org.junit.Rule;
+import org.junit.Ignore;
 import org.junit.rules.TemporaryFolder;
 import org.junit.rules.TestName;
 import static org.hamcrest.Matchers.is;
@@ -298,7 +299,7 @@ public class CobolTest
     }
 
     
-    @Test public void testMissing10() throws Exception
+    @Test @Ignore public void testMissing10() throws Exception
     {
 
 	Parser p = createTestParserGrammarString
@@ -313,15 +314,62 @@ public class CobolTest
 	assertThat(tree.toStringTree(p),
 		   is(l("prog",
 			l("dataDesc","01","XXXXX","PIC",
-			  l("pictureString","X","(","9",")"),".\\n ")).toString()));
-	/*
-	assertThat(tree.toStringTree(p),
-		   is(l("prog",
-			l("dataDesc","01","XXXXX","PIC",
 			  l("pictureString","X","(","9",")"),"<missing EOS>"),
 			l("dataDesc","02","YYYYY","PIC",
 			  l("pictureString","X","(","9",")"),".\\n")).toString()));
-	*/
     }
+
+
+    String simpleGrammar2 =
+	"grammar Simple;\n" +
+	"prog : dataDesc+ ; \n" +
+	"dataDesc : LEVEL ID ('PICTURE'|'PIC') PICTURESTR EOS;\n" +
+	"LEVEL : ('0' .. '9')('0' .. '9'); \n" +
+	"ID : FIRST_NAME NAME* ;\n" +
+	"fragment FIRST_NAME : ('a' .. 'z' ) | ('A' .. 'Z') ;\n"  + 
+	"fragment NAME : ('a' .. 'z' ) | ('A' .. 'Z') | ('0' .. '9') ;\n" +
+	"PICTURESTR : PICTURESTR0 ;\n" +
+	"fragment PICTURESTR0 : ('X'+ '(' DIGIT ')')+ ;\n" +
+        "DIGIT : ('0' .. '9')+ ;\n" +
+	"EOS : '.' [ \\t\\n]+ ;\n";
+	;
+
+
+    @Test public void testFragment1() throws Exception
+    {
+
+	Parser p = createTestParserGrammarString
+	    (tempFolder.getRoot().getPath(),
+	     "Simple",
+	     simpleGrammar2,
+	     "01 XXXXX PIC X(9).\n" +
+	     "02 YYYYY PIC X(9).\n"
+	     );
+	ParseTree tree = execStartRule(p,"prog");
+	assertThat(tree.toStringTree(p),
+		   is(l("prog",
+			l("dataDesc","01","XXXXX","PIC","X(9)",".\\n"),
+			l("dataDesc","02","YYYYY","PIC","X(9)",".\\n")).toString()));
+
+    }
+
+    @Test @Ignore public void testFragment2() throws Exception
+    {
+
+	Parser p = createTestParserGrammarString
+	    (tempFolder.getRoot().getPath(),
+	     "Simple",
+	     simpleGrammar2,
+	     "01 XXXXX PIC X (9).\n" +
+	     "02 YYYYY PIC X(9).\n"
+	     );
+	ParseTree tree = execStartRule(p,"prog");
+	assertThat(tree.toStringTree(p),
+		   is(l("prog",
+			l("dataDesc","01","XXXXX","PIC","X(9)",".\\n"),
+			l("dataDesc","02","YYYYY","PIC","X(9)",".\\n")).toString()));
+
+    }
+
     
 }
