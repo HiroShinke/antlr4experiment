@@ -85,7 +85,8 @@ public class AppTest
 						 "X",
 						 "grammar X;\n" +
 						 "startRule: DIGIT* EOF;\n" +
-						 "DIGIT: ('0' .. '9');\n",
+						 "DIGIT: ('0' .. '9');\n" +
+						 "WS : [ \\t\\n] -> skip ;\n",
 						 "10");
 	ParseTree tree = execStartRule(p,"startRule");
 	assertThat(tree.toStringTree(p),is("(startRule 1 0 <EOF>)"));
@@ -99,7 +100,8 @@ public class AppTest
 						 "grammar X;\n" +
 						 "startRule: number* EOF;\n" +
 						 "number : DIGIT ;\n" +
-						 "DIGIT: ('0' .. '9')+ ;\n",
+						 "DIGIT: ('0' .. '9')+ ;\n" +
+						 "WS : [ \\t\\n] -> skip ;\n",
 						 "125 300");
 	ParseTree tree = execStartRule(p,"startRule");
 	assertThat(tree.toStringTree(p),
@@ -123,7 +125,8 @@ public class AppTest
 	     ";\n" +
 	     "stuff : DIGIT;\n" +
 	     "DIGIT : ('0' .. '9');\n"+
-	     "ALPH  : ('a' .. 'z' ) | ('A' .. 'Z' );",
+	     "ALPH  : ('a' .. 'z' ) | ('A' .. 'Z' );\n" +
+	     "WS : [ \\t\\n] -> skip ;\n",
 	     "123a45bb56");
 	ParseTree tree = execStartRule(p,"startRule");
 	assertThat(tree.toStringTree(p),
@@ -156,7 +159,8 @@ public class AppTest
 	     "startRule : stuff* EOF;\n" +
 	     "stuff : DIGIT;\n" +
 	     "DIGIT : ('0' .. '9');\n"+
-	     "ALPH  : ('a' .. 'z' ) | ('A' .. 'Z' );",
+	     "ALPH  : ('a' .. 'z' ) | ('A' .. 'Z' );\n" +
+	     "WS : [ \\t\\n] -> skip ;\n",
 	     "123a45bb56");
 	ParseTree tree = execStartRule(p,"startRule");
 	assertThat(tree.toStringTree(p),
@@ -185,7 +189,8 @@ public class AppTest
 	     "startRule : stuff* EOF;\n" +
 	     "stuff : DIGIT;\n" +
 	     "DIGIT : ('0' .. '9');\n"+
-	     "ALPH  : ('a' .. 'z' ) | ('A' .. 'Z' );",
+	     "ALPH  : ('a' .. 'z' ) | ('A' .. 'Z' );\n" +
+	     "WS : [ \\t\\n] -> skip ;\n",
 	     "12 3a 45 b b5 6");
 	ParseTree tree = execStartRule(p,"startRule");
 	assertThat(tree.toStringTree(p),
