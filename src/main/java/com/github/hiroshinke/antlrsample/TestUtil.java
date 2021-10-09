@@ -41,11 +41,10 @@ import javax.tools.JavaFileObject;
  */
 public class TestUtil
 {
-
+    
     public static final String CLASSPATH = System.getProperty("java.class.path");
     public static final String PATH_SEP = System.getProperty("path.separator");
 
-    
     public static ListExpr l(Object ... objs){
 	ListExpr l = new ListExpr();
 	for (Object o: objs){
@@ -108,6 +107,20 @@ public class TestUtil
 	return ok;
     }
 
+
+    public static void printSource(String root,
+				   String... fileNames)
+	throws IOException {
+
+	for (String fileName : fileNames) {
+	    File f = new File(root, fileName);
+	    String src = FileUtils.readFileToString(f,StandardCharsets.UTF_8);
+	    System.out.println("FIle=" + f.toString());
+	    System.out.println(src);
+	}
+    }
+
+    
     public static void antlrOnString(String workdir,
 				     String grammarFileName,
 				     boolean defaultListener,
@@ -205,6 +218,21 @@ public class TestUtil
 						       String toParse)
 	throws Exception {
 
+	return createTestParserGrammarString(workDir,
+					     grammarName,
+					     grammarString,
+					     toParse,
+					     false);
+    }
+
+
+    public static Parser createTestParserGrammarString(String workDir,
+						       String grammarName,
+						       String grammarString,
+						       String toParse,
+						       boolean printSource)
+	throws Exception {
+
 	final String grammarFileName = grammarName + ".g";
 
 	
@@ -216,6 +244,12 @@ public class TestUtil
 		grammarName + "Parser.java",
 		grammarName + "Lexer.java");
 
+	if( printSource ){
+	    printSource(workDir,
+			grammarName + "Parser.java",
+			grammarName + "Lexer.java");
+	}
+	
 	return createParser(workDir,
 			    grammarName + "Parser",
 			    grammarName + "Lexer",
