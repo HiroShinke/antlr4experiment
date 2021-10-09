@@ -73,7 +73,7 @@ public class RecoverTest
 	     "02 YYYYY PIC X(9).\n"
 	     );
 
-	// p.setErrorHandler(new RecoverTestStrategy());
+	p.setErrorHandler(new RecoverTestStrategy());
 	
 	ParseTree tree = execStartRule(p,"prog");
 	assertThat(tree.toStringTree(p),
@@ -97,7 +97,7 @@ public class RecoverTest
 	     "02 ZZZZZ PIC X(9).\n"
 	     );
 
-	// p.setErrorHandler(new RecoverTestStrategy());
+	p.setErrorHandler(new RecoverTestStrategy());
 	
 	ParseTree tree = execStartRule(p,"prog");
 	assertThat(tree.toStringTree(p),
