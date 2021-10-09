@@ -45,6 +45,9 @@ public class TestUtil
     public static final String CLASSPATH = System.getProperty("java.class.path");
     public static final String PATH_SEP = System.getProperty("path.separator");
 
+    public static boolean printSource =
+	System.getProperty("testutil.printSource").equals("true") ? true : false;
+
     public static ListExpr l(Object ... objs){
 	ListExpr l = new ListExpr();
 	for (Object o: objs){
@@ -218,24 +221,8 @@ public class TestUtil
 						       String toParse)
 	throws Exception {
 
-	return createTestParserGrammarString(workDir,
-					     grammarName,
-					     grammarString,
-					     toParse,
-					     false);
-    }
-
-
-    public static Parser createTestParserGrammarString(String workDir,
-						       String grammarName,
-						       String grammarString,
-						       String toParse,
-						       boolean printSource)
-	throws Exception {
-
 	final String grammarFileName = grammarName + ".g";
 
-	
 	File file = new File(workDir,grammarFileName);
 	FileUtils.writeStringToFile(file,grammarString,StandardCharsets.UTF_8);
 
