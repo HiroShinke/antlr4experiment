@@ -45,8 +45,7 @@ public class TestUtil
     public static final String CLASSPATH = System.getProperty("java.class.path");
     public static final String PATH_SEP = System.getProperty("path.separator");
 
-    public static boolean printSource =
-	System.getProperty("testutil.printSource").equals("true") ? true : false;
+    public static boolean printSource = false;
 
     public static ListExpr l(Object ... objs){
 	ListExpr l = new ListExpr();
