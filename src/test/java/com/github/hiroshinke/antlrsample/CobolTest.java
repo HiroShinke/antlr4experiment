@@ -58,7 +58,8 @@ public class CobolTest
 	"fragment NAME : ('a' .. 'z' ) | ('A' .. 'Z') | ('0' .. '9') ;\n" +
 	"pictureString : ('X'+ '(' DIGIT ')')+ ;\n" +
         "DIGIT : ('0' .. '9')+ ;\n" +
-	"EOS : '.' [ \\t\\n]+ ;\n";
+	"EOS : '.' [ \\t\\n]+ ;\n" +
+    	"WS : [ \\t\\n]+ -> skip ;\n"
 	;
 
     @Test public void test1() throws Exception
@@ -331,7 +332,8 @@ public class CobolTest
 	"PICTURESTR : PICTURESTR0 ;\n" +
 	"fragment PICTURESTR0 : ('X'+ '(' DIGIT ')')+ ;\n" +
         "DIGIT : ('0' .. '9')+ ;\n" +
-	"EOS : '.' [ \\t\\n]+ ;\n";
+	"EOS : '.' [ \\t\\n]+ ;\n" +
+    	"WS : [ \\t\\n]+ -> skip ;\n"
 	;
 
 
